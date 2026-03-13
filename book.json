@@ -1,0 +1,25 @@
+{
+  "books": [
+    {
+      "title": "The Three Musketeers",
+      "authors": ["Alexandre Dumas"],
+      "publication_year": 1844,
+      "publisher": "Baudry's European Library",
+      "genre": "Historical Adventure"
+    },
+    {
+      "title": "Sandstorm",
+      "authors": ["James Rollins"],
+      "publication_year": 2004,
+      "publisher": "William Morrow",
+      "genre": "Action Adventure / Thriller"
+    },
+    {
+      "title": "King Solomon's Mines",
+      "authors": ["H. Rider Haggard", "Andrew Lang"],
+      "publication_year": 1885,
+      "publisher": "Cassell & Company",
+      "genre": "Adventure Fiction"
+    }
+  ]
+}
