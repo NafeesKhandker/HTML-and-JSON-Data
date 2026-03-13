@@ -1,0 +1,75 @@
+---
+title: "Assignment HTML and JSON"
+author: "Khandker Qaiduzzaman"
+format: html
+editor: visual
+---
+
+## Objective
+
+The objective of this assignment is to create HTML and JSON data files containing information about selected adventure books and import them into R for analysis.
+
+## Approach
+
+For this assignment, I created a small dataset containing three adventure books written by authors whose works I enjoy reading, including Alexandre Dumas, James Rollins, and H. Rider Haggard.
+
+The selected books are:
+
+-   **The Three Musketeers**
+-   **Sandstorm**
+-   **King Solomon's Mines**
+
+The dataset contains the following variables:
+
+-   **Title** – Name of the book
+-   **Authors** – Author or authors of the book
+-   **Publication Year** – Year the book was originally published
+-   **Publisher** – Publishing company responsible for the book
+-   **Genre** – Literary genre of the book
+
+The same dataset is stored in two different formats:
+
+1.  **HTML table** – representing structured tabular data often found on websites.
+2.  **JSON file** – representing hierarchical data commonly used by APIs.
+
+Working with both formats will demonstrate how structured information from web sources can be imported and converted into R data frames.
+
+## Anticipated Challenges
+
+One of the main challenges when working with web-based data formats is that they often represent information in different structures. In HTML files, tabular data is stored inside table elements, which require specialized packages such as rvest to extract the data. JSON files, on the other hand, store information using nested objects and arrays, which must be parsed using packages such as jsonlite. Another challenge involves handling nested values such as lists of authors. In JSON format, multiple authors may be stored as an array, which must be converted into a format suitable for analysis within R.
+
+## Implementation of Data Import
+
+The following code demonstrates how the HTML table and JSON file can be imported into R and converted into data frames for further analysis.
+
+```{r}
+library(rvest)
+library(jsonlite)
+library(dplyr)
+library(gt)
+```
+
+The HTML file contains a table that lists the books and their attributes. Using the **rvest** package, the table can be extracted and converted into a data frame.
+
+```{r}
+html_url <- "https://raw.githubusercontent.com/NafeesKhandker/HTML-and-JSON-Data/refs/heads/main/book.html"
+
+books_html <- read_html(html_url) |>
+  html_table(fill = TRUE)
+
+books_html[[1]] |>
+  head() |>
+  gt()
+```
+
+The JSON file stores the same dataset but in a hierarchical format. The **jsonlite** package can be used to convert the JSON structure into an R data frame.
+
+```{r}
+json_url <- "https://raw.githubusercontent.com/NafeesKhandker/HTML-and-JSON-Data/refs/heads/main/book.json"
+
+books_json <- fromJSON(json_url)
+
+books_json$books |>
+  head() |>
+  gt()
+```
