@@ -47,17 +47,21 @@ library(rvest)
 library(jsonlite)
 library(dplyr)
 library(gt)
+library(stringr)
 ```
 
 The HTML file contains a table that lists the books and their attributes. Using the **rvest** package, the table can be extracted and converted into a data frame.
 
 ```{r}
+# HTML file
 html_url <- "https://raw.githubusercontent.com/NafeesKhandker/HTML-and-JSON-Data/refs/heads/main/book.html"
 
 books_html <- read_html(html_url) |>
   html_table(fill = TRUE)
 
-books_html[[1]] |>
+books_html_df <- books_html[[1]]
+
+books_html_df |>
   head() |>
   gt()
 ```
@@ -65,11 +69,37 @@ books_html[[1]] |>
 The JSON file stores the same dataset but in a hierarchical format. The **jsonlite** package can be used to convert the JSON structure into an R data frame.
 
 ```{r}
+# JSON file
 json_url <- "https://raw.githubusercontent.com/NafeesKhandker/HTML-and-JSON-Data/refs/heads/main/book.json"
 
 books_json <- fromJSON(json_url)
 
-books_json$books |>
+books_json_df <- as.data.frame(books_json$books)
+
+books_json_df |>
   head() |>
   gt()
 ```
+
+```{r}
+# Convert to base data.frame (removes tibble class differences)
+books_html_df <- as.data.frame(books_html_df)
+books_json_df <- as.data.frame(books_json_df)
+
+# Standardize column names
+colnames(books_html_df) <- c("title","authors","publication_year","publisher","genre")
+
+# Convert JSON authors list to string
+books_json_df$authors <- sapply(books_json_df$authors, paste, collapse = ", ")
+
+# Final comparison
+identical(books_html_df, books_json_df)
+```
+
+# Conclusion
+
+The HTML and JSON datasets were imported into R and converted into data frames. Because the JSON file stored authors as an array while the HTML table stored them as a single string, the JSON author field was collapsed into a comma-separated string. After standardizing the column names and data frame structures, the identical() function confirmed that the two datasets were identical.
+
+# Reference
+
+1.  OpenAI. (2026, March 15). *Conversation about comparing HTML and JSON datasets in R using identical() and all.equal()*. ChatGPT. <https://chat.openai.com/>
